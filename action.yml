@@ -1,0 +1,18 @@
+name: "ECR docker"
+description: "Push or pull an images to/from an ECR registry."
+inputs:
+  action:
+    description: "'push' or 'pull'."
+    required: true
+  repository-url:
+    description: "An ECR repository URL."
+    required: true
+  image:
+    description: "A local docker image."
+    required: true
+  tags:
+    description: "Any additional tags to apply to the image in ECR."
+    required: false
+runs:
+  using: "node16"
+  main: "lib/main.js"
