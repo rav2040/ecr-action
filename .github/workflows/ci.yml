@@ -25,17 +25,17 @@ jobs:
       - name: Build
         run: yarn build
 
-      # - name: Bump version
-      #   id: bump_version
-      #   run: |
-      #     npm version patch --no-git-tag-version
-      #     PACKAGE_VERSION=$(cat package.json \
-      #       | grep version \
-      #       | head -1 \
-      #       | awk -F: '{ print $2 }' \
-      #       | sed 's/[",]//g' \
-      #       | xargs)
-      #     echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+      - name: Bump version
+        id: bump_version
+        run: |
+          npm version patch --no-git-tag-version
+          PACKAGE_VERSION=$(cat package.json \
+            | grep version \
+            | head -1 \
+            | awk -F: '{ print $2 }' \
+            | sed 's/[",]//g' \
+            | xargs)
+          echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
 
       - name: Commit build output
         uses: stefanzweifel/git-auto-commit-action@v4
@@ -43,13 +43,13 @@ jobs:
           commit_message: Merge build output [skip-ci]
           tagging_message: "v${{ steps.bump_version.outputs.package_version }}"
 
-      # - name: Tag major version and latest
-      #   run: |
-      #     MAJOR_VERSION=$(echo ${{ steps.bump_version.outputs.package_version }} | awk -F. '{ print $1 }')
-      #     git push origin :refs/tags/v$MAJOR_VERSION
-      #     git push origin :refs/tags/latest
-      #     git tag \
-      #       -a v$MAJOR_VERSION \
-      #       -m "v$MAJOR_VERSION"
-      #     git tag -a latest -m "latest"
-      #     git push --follow-tags
+      - name: Tag major version and latest
+        run: |
+          MAJOR_VERSION=$(echo ${{ steps.bump_version.outputs.package_version }} | awk -F. '{ print $1 }')
+          git push origin :refs/tags/v$MAJOR_VERSION
+          git push origin :refs/tags/latest
+          git tag \
+            -a v$MAJOR_VERSION \
+            -m "v$MAJOR_VERSION"
+          git tag -a latest -m "latest"
+          git push --follow-tags
